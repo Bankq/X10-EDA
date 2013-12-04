@@ -1,4 +1,5 @@
 import x10.util.Set;
+
 /*
  * Event class
  */
@@ -8,6 +9,8 @@ public class Event {
 	var channel : String;
 	var cancelled : boolean;
 	var stopped : boolean;
+	var success : boolean;
+	var successCallBack : (e : Event) => Any;
 	var value : Value;
 	
 	public def this() {

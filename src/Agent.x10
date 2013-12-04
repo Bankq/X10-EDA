@@ -21,8 +21,10 @@ public class Agent {
 		this.channel = chn;
 		
 		this.defaultHandler = new Handler("default");
+		
 		this.handlers.put("*", new ArrayList[Handler]());
 		this.handlers("*")().add(defaultHandler);
+		
 		this._task_queue = new ArrayList[Event]();
 		this._tqLock = new Lock();
 		this._running = new AtomicBoolean(false);
@@ -36,13 +38,13 @@ public class Agent {
 	public def registerHandler(event : Event, h : (e : Event) => Value) {
 		val handler = new Handler(h);
 		if (event.channel == null) {
-			//log("No channel");
+			log("No channel");
 			this.registerHandler(h);
 		} else if (this.handlers.containsKey(event.channel)) {
-			//log("First channel " + event.channel);
+			log("Register another handler on channel " + event.channel);
 			this.handlers(event.channel)().add(handler);
 		} else {
-			//log("Found channel " + event.channel);
+			log("Register new channel " + event.channel);
 			this.handlers.put(event.channel, new ArrayList[Handler]());
 			this.handlers(event.channel)().add(handler);
 		}
@@ -100,7 +102,7 @@ public class Agent {
 			event.channel = this.channel;
 		}
 				
-		// put it in queue
+		// put it in task queue
 		this._tqLock.lock();
 		this._task_queue.addBefore(0l, event);
 		this._tqLock.unlock();
